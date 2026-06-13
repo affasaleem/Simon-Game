@@ -10,7 +10,6 @@ A modern and responsive memory game built using **HTML, CSS, JavaScript, and jQu
 
 ## 📸 Preview
 
-Add screenshots or GIFs here.
 
 ```md
 ![Project Screenshot](./simon-game.png)
