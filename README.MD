@@ -140,13 +140,13 @@ Feel free to fork the repository and submit a pull request.
 ## 📬 Connect With Me
 
 GitHub:
-[Add your LinkedIn profile link](https://github.com/affasaleem)
+https://github.com/affasaleem
 
 LinkedIn:
-[Add your LinkedIn profile link](https://lk.linkedin.com/in/affasaleem)
+https://lk.linkedin.com/in/affasaleem
 
 Portfolio:
-[Add your portfolio website link](https://affasaleem.github.io/my-portfolio/)
+https://affasaleem.github.io/my-portfolio/
 
 ---
 
