@@ -1,50 +1,37 @@
-# 🧠 AI Memory Trainer - Simon Game
+# 🎮 Simon Game Pro – Interactive Memory Challenge
 
-A modern, responsive, and interactive memory game inspired by the classic Simon Game. This project challenges players to remember and repeat increasingly complex color sequences while enjoying a futuristic AI-themed user interface.
+A modern and responsive memory game built using **HTML, CSS, JavaScript, and jQuery**. The game challenges players to memorize and repeat increasingly complex color sequences while improving concentration and memory skills.
 
 ## 🚀 Live Demo
 
-🔗 Live Website: [Add Live Demo Link Here]
-
-## 📸 Preview
-
-![Project Screenshot](./assets/preview.png)
-
-> Replace the image above with your own project screenshot.
+🔗 https://affasaleem.github.io/Simon-Game/
 
 ---
 
-## 🎯 About The Project
+## 📸 Preview
 
-AI Memory Trainer is a browser-based memory game designed to improve concentration, pattern recognition, and short-term memory skills.
+Add screenshots or GIFs here.
 
-Unlike the traditional Simon Game, this version features a modern user interface, responsive design, smooth animations, sound effects, and an enhanced gaming experience suitable for showcasing in a professional portfolio.
+```md
+![Project Screenshot](./simon-game.png)
+```
 
 ---
 
 ## ✨ Features
 
-✅ Interactive Memory Challenge
-
-✅ Responsive Design (Mobile, Tablet & Desktop)
-
-✅ Modern Gaming Interface
-
-✅ Dynamic Level Progression
-
-✅ Score Tracking
-
-✅ High Score Storage using LocalStorage
-
-✅ Sound Effects
-
-✅ Smooth Animations & Transitions
-
-✅ Keyboard and Mouse Support
-
-✅ Game Over & Restart Functionality
-
-✅ Clean and Organized Code Structure
+* 🎯 Classic Simon Game Gameplay
+* 📱 Fully Responsive Design
+* 🎨 Modern Glassmorphism UI
+* 🌙 Dark Theme Experience
+* 🔊 Interactive Sound Effects
+* 🏆 Score Tracking
+* 💾 Local Storage Support
+* ⚡ Smooth Animations
+* 🎮 Keyboard & Mouse Support
+* 📊 Level Progression System
+* 🔄 Restart Functionality
+* 🎯 Memory Training Experience
 
 ---
 
@@ -54,18 +41,17 @@ Unlike the traditional Simon Game, this version features a modern user interface
 * CSS3
 * JavaScript (ES6)
 * jQuery
-* LocalStorage API
 
 ---
 
 ## 📂 Project Structure
 
 ```bash
-AI-Memory-Trainer/
+Simon-Game-Pro/
 │
 ├── index.html
 ├── styles.css
-├── script.js
+├── game.js
 │
 ├── sounds/
 │   ├── red.mp3
@@ -77,101 +63,105 @@ AI-Memory-Trainer/
 └── README.md
 ```
 
+---
+
 ## 🎮 How To Play
 
 1. Press any key or click the Start button.
-2. Watch the sequence carefully.
+2. Watch the sequence shown by the game.
 3. Repeat the sequence by clicking the colored buttons.
 4. Each level adds a new color to the sequence.
 5. Continue as long as you can remember the pattern.
-6. The game ends if you click the wrong color.
+6. The game ends when an incorrect color is selected.
 
 ---
 
-## 💡 Learning Outcomes
+## 🏆 Scoring System
 
-This project helped me practice:
+| Action         | Points      |
+| -------------- | ----------- |
+| Complete Level | +1 Level    |
+| New High Score | Achievement |
+| Wrong Move     | Game Over   |
+
+Try to beat your highest score every time!
+
+---
+
+## 📱 Responsive Design
+
+This project is optimized for:
+
+* Desktop
+* Laptop
+* Tablet
+* Mobile Devices
+
+---
+
+## 🎯 Learning Outcomes
+
+Through this project, I practiced:
 
 * DOM Manipulation
 * Event Handling
+* jQuery Fundamentals
 * JavaScript Functions
-* Arrays & Loops
-* Local Storage
+* Arrays and Loops
+* Game Logic Development
 * Responsive Web Design
 * UI/UX Improvements
-* Debugging Techniques
-* jQuery Fundamentals
+* Local Storage Usage
 
 ---
 
-## 📈 Future Improvements
 
-* Dark / Light Theme Toggle
+## 🔮 Future Improvements
+
 * Achievement System
+* Dark/Light Theme Toggle
+* Sound Controls
 * Multiplayer Mode
-* Leaderboard Integration
-* Progressive Web App (PWA)
-* Advanced Difficulty Levels
+* Online Leaderboard
+* PWA Support
 * Statistics Dashboard
-
----
-
-## ⚙️ Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/yourusername/ai-memory-trainer.git
-```
-
-Open the project folder:
-
-```bash
-cd ai-memory-trainer
-```
-
-Run the project by opening:
-
-```bash
-index.html
-```
-
-Or use VS Code Live Server.
+* Confetti Celebrations
 
 ---
 
 ## 🤝 Contributing
 
-Contributions, suggestions, and feedback are welcome.
+Contributions, suggestions, and improvements are welcome.
 
-Feel free to fork the project and submit a pull request.
+Feel free to fork the repository and submit a pull request.
 
 ---
 
-## 👨‍💻 Author
+## 📬 Connect With Me
 
-**Your Name**
+GitHub:
+[Add your LinkedIn profile link](https://github.com/affasaleem)
 
-Frontend Developer | Web Development Enthusiast
+LinkedIn:
+[Add your LinkedIn profile link](https://lk.linkedin.com/in/affasaleem)
 
-GitHub: https://github.com/yourusername
-
-LinkedIn: https://linkedin.com/in/yourprofile
-
-Portfolio: https://yourportfolio.com
+Portfolio:
+[Add your portfolio website link](https://affasaleem.github.io/my-portfolio/)
 
 ---
 
 ## ⭐ Support
 
-If you found this project helpful, please consider giving it a ⭐ on GitHub.
-
-It motivates me to continue building and sharing more projects.
+If you like this project, consider giving it a ⭐ on GitHub.
 
 ---
 
-## 📄 License
+## 👨‍💻 Author
 
-This project is licensed under the MIT License.
+**Affa Saleem**
 
-Feel free to use, modify, and distribute it for personal and educational purposes.
+Aspiring Frontend Developer passionate about building interactive and user-friendly web applications.
+
+---
+
+### Made with ❤️ using HTML, CSS, JavaScript & jQuery
