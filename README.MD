@@ -6,14 +6,6 @@ A modern and responsive memory game built using **HTML, CSS, JavaScript, and jQu
 
 🔗 https://affasaleem.github.io/Simon-Game/
 
----
-
-## 📸 Preview
-
-
-```md
-![Project Screenshot](./simon-game.png)
-```
 
 ---
 
