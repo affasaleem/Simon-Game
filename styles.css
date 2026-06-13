@@ -1,0 +1,1102 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   NeuroFlash™ Simon Game Pro — styles.css
+   Author: Affa Saleem | Version: 2.0.0
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── 1. DESIGN TOKENS (CSS Custom Properties) ─── */
+:root {
+  /* Dark theme (default) */
+  --bg-start: #0f0c29;
+  --bg-mid:   #302b63;
+  --bg-end:   #24243e;
+
+  --glass-bg:      rgba(255, 255, 255, 0.06);
+  --glass-border:  rgba(255, 255, 255, 0.12);
+  --glass-shadow:  0 8px 32px rgba(0, 0, 0, 0.4);
+
+  --text-primary:   #f0f0ff;
+  --text-secondary: rgba(240, 240, 255, 0.6);
+  --text-accent:    #a78bfa;
+
+  --brand-gradient: linear-gradient(135deg, #a78bfa, #60a5fa);
+  --neon-glow:      0 0 20px currentColor, 0 0 40px currentColor;
+
+  /* Button neon colours */
+  --color-green:  #22c55e;
+  --color-red:    #ef4444;
+  --color-blue:   #3b82f6;
+  --color-yellow: #facc15;
+
+  /* UI colours */
+  --accent-purple: #a78bfa;
+  --accent-blue:   #60a5fa;
+  --accent-pink:   #f472b6;
+
+  /* Layout */
+  --radius-sm:  8px;
+  --radius-md:  16px;
+  --radius-lg:  24px;
+  --radius-xl:  32px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow:   400ms ease;
+
+  /* Z-index stack */
+  --z-canvas:  0;
+  --z-content: 10;
+  --z-controls: 20;
+  --z-modal:   100;
+  --z-toast:   200;
+}
+
+/* ─── Light theme overrides ─── */
+[data-theme="light"] {
+  --bg-start: #e0e7ff;
+  --bg-mid:   #c7d2fe;
+  --bg-end:   #ddd6fe;
+
+  --glass-bg:      rgba(255, 255, 255, 0.55);
+  --glass-border:  rgba(255, 255, 255, 0.8);
+  --glass-shadow:  0 8px 32px rgba(99, 102, 241, 0.15);
+
+  --text-primary:   #1e1b4b;
+  --text-secondary: rgba(30, 27, 75, 0.65);
+  --text-accent:    #6d28d9;
+
+  --brand-gradient: linear-gradient(135deg, #6d28d9, #2563eb);
+}
+
+/* ─── 2. RESET & BASE ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
+  background-attachment: fixed;
+  color: var(--text-primary);
+  text-align: center;
+  overflow-x: hidden;
+  transition: background var(--transition-slow), color var(--transition-normal);
+}
+
+/* ─── 3. ANIMATED BACKGROUND ─── */
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+}
+
+/* ─── 4. GLASSMORPHISM UTILITY ─── */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* ─── 5. ICON BUTTONS (mute, theme) ─── */
+.icon-btn {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.icon-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 14px var(--accent-purple);
+}
+
+.icon-btn:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 3px;
+}
+
+/* ─── 6. THEME TOGGLE ─── */
+#theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: var(--z-controls);
+}
+
+/* ─── 7. SOUND CONTROLS ─── */
+.sound-controls {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: var(--z-controls);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 6px;
+  border-radius: var(--radius-full);
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80px;
+  height: 4px;
+  background: var(--glass-border);
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent-purple);
+  cursor: pointer;
+  box-shadow: 0 0 8px var(--accent-purple);
+  transition: transform var(--transition-fast);
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+}
+
+.volume-slider:focus-visible {
+  outline: 2px solid var(--accent-purple);
+}
+
+/* ─── 8. START SCREEN ─── */
+.start-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.6s ease;
+}
+
+.start-content {
+  max-width: 500px;
+  width: 100%;
+  padding: 48px 40px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-icon {
+  font-size: 4rem;
+  animation: floatBob 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(167, 139, 250, 0.6));
+}
+
+/* Brand text */
+.brand {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  line-height: 1.4;
+}
+
+.brand-prefix { background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.brand-suffix { color: var(--text-primary); }
+.brand-tm { font-size: 0.5em; vertical-align: super; color: var(--text-secondary); -webkit-text-fill-color: var(--text-secondary); }
+
+.start-title {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+.start-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 340px;
+  line-height: 1.6;
+}
+
+/* Hero stats */
+.hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.04);
+  border-radius: var(--radius-lg);
+  padding: 16px 24px;
+  width: 100%;
+  justify-content: center;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.hero-stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--glass-border);
+}
+
+/* CTA Buttons */
+.start-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.cta-btn {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px 28px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-normal);
+  letter-spacing: 0.5px;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #7c3aed, #3b82f6);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+}
+
+.primary-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.6);
+}
+
+.primary-btn:active {
+  transform: scale(0.97);
+}
+
+.secondary-btn {
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+}
+
+.secondary-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.1);
+  box-shadow: 0 4px 20px rgba(167,139,250,0.2);
+}
+
+.cta-btn:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 3px;
+}
+
+.keyboard-hint {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+/* ─── 9. GAME AREA ─── */
+.game-area {
+  position: relative;
+  z-index: var(--z-content);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 16px 40px;
+  gap: 20px;
+}
+
+/* ─── 10. GAME HEADER ─── */
+.game-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-logo {
+  font-size: 2.5rem;
+  animation: floatBob 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px rgba(167,139,250,0.5));
+}
+
+.header-brand {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
+.header-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ─── 11. STATUS BAR ─── */
+.status-bar {
+  font-family: 'Press Start 2P', cursive;
+  font-size: clamp(0.55rem, 2.5vw, 0.85rem);
+  color: var(--text-primary);
+  padding: 14px 28px;
+  border-radius: var(--radius-full);
+  letter-spacing: 1px;
+  min-width: 260px;
+  transition: all var(--transition-normal);
+}
+
+/* ─── 12. DASHBOARD ─── */
+.dashboard {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dash-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 22px;
+  border-radius: var(--radius-lg);
+  min-width: 80px;
+  transition: transform var(--transition-fast);
+}
+
+.dash-card:hover { transform: translateY(-2px); }
+
+.dash-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+}
+
+.dash-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.highlight-card .dash-value {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dash-value.bump {
+  animation: bumpScale 0.3s ease;
+}
+
+/* ─── 13. PROGRESS BAR ─── */
+.progress-container {
+  width: 100%;
+  max-width: 520px;
+}
+
+.progress-track {
+  position: relative;
+  height: 10px;
+  background: rgba(255,255,255,0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #7c3aed, #3b82f6, #22c55e);
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.6);
+}
+
+.progress-label {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ─── 14. SIMON GAME BOARD ─── */
+.container {
+  position: relative;
+  width: min(430px, 92vw);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.row {
+  display: flex;
+  gap: 0;
+}
+
+/* ─── Center label ─── */
+.simon-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-mid));
+  border: 4px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+
+.simon-center-text {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.5rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+}
+
+/* ─── Simon Buttons ─── */
+.btn {
+  width: calc(min(430px, 92vw) / 2 - 2px);
+  height: calc(min(430px, 92vw) / 2 - 2px);
+  border: 3px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: filter var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  display: inline-block;
+}
+
+/* Button corner radii */
+#green  { border-radius: 100% 0 0 0; }
+#red    { border-radius: 0 100% 0 0; }
+#yellow { border-radius: 0 0 0 100%; }
+#blue   { border-radius: 0 0 100% 0; }
+
+/* Base colours — richer than originals */
+.btn.green  { background: radial-gradient(circle at 30% 30%, #4ade80, #16a34a); }
+.btn.red    { background: radial-gradient(circle at 30% 30%, #f87171, #dc2626); }
+.btn.blue   { background: radial-gradient(circle at 30% 30%, #60a5fa, #1d4ed8); }
+.btn.yellow { background: radial-gradient(circle at 30% 30%, #fde047, #ca8a04); }
+
+/* Hover state */
+.btn:hover {
+  filter: brightness(1.25);
+  transform: scale(1.025);
+  z-index: 2;
+}
+
+.btn:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 4px;
+  z-index: 3;
+}
+
+/* Active/pressed state — jQuery adds .pressed */
+.btn.pressed {
+  filter: brightness(2) saturate(1.5);
+  transform: scale(0.95);
+}
+
+/* Neon glow by colour */
+.btn.green.pressed  { box-shadow: 0 0 40px #22c55e, 0 0 80px #22c55e55; }
+.btn.red.pressed    { box-shadow: 0 0 40px #ef4444, 0 0 80px #ef444455; }
+.btn.blue.pressed   { box-shadow: 0 0 40px #3b82f6, 0 0 80px #3b82f655; }
+.btn.yellow.pressed { box-shadow: 0 0 40px #facc15, 0 0 80px #facc1555; }
+
+/* Subtle glow always visible */
+.btn.green  { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);  }
+.btn.red    { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);   }
+.btn.blue   { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);  }
+.btn.yellow { box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);  }
+
+/* Ripple element (injected by JS) */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: rippleAnim 0.5s linear;
+  background: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+/* Disabled state (during Simon's turn) */
+.btn.disabled {
+  pointer-events: none;
+  filter: brightness(0.6);
+  cursor: not-allowed;
+}
+
+/* ─── 15. GAME OVER BODY FLASH ─── */
+.game-over {
+  animation: gameOverFlash 0.2s ease;
+}
+
+/* ─── 16. ACHIEVEMENTS PANEL ─── */
+.achievements-panel {
+  max-width: 520px;
+  width: 100%;
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  text-align: left;
+}
+
+.achievements-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.achievements-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ach-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--glass-border);
+  transition: all var(--transition-normal);
+  white-space: nowrap;
+}
+
+.ach-badge.locked {
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.04);
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.ach-badge.unlocked {
+  background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(59,130,246,0.3));
+  border-color: rgba(167,139,250,0.5);
+  color: var(--text-primary);
+  box-shadow: 0 0 12px rgba(167,139,250,0.25);
+  animation: badgePop 0.4s ease;
+}
+
+/* ─── 17. MODALS ─── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.25s ease;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-panel {
+  position: relative;
+  max-width: 480px;
+  width: 100%;
+  padding: 40px 36px;
+  border-radius: var(--radius-xl);
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.modal-close:hover {
+  background: rgba(239,68,68,0.3);
+  transform: scale(1.1);
+}
+
+.modal-close:focus-visible {
+  outline: 2px solid var(--accent-purple);
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+/* Instructions modal */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.instruction-section h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-accent);
+}
+
+.instruction-section ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.instruction-section ul li::before {
+  content: "→ ";
+  color: var(--accent-purple);
+}
+
+.instruction-section ul li {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.key-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.key-chip {
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(167,139,250,0.2);
+  border: 1px solid rgba(167,139,250,0.4);
+  border-radius: 6px;
+  padding: 3px 8px;
+  color: var(--accent-purple);
+  white-space: nowrap;
+  justify-self: start;
+}
+
+.achievement-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Game Over modal */
+.gameover-panel {
+  text-align: center;
+}
+
+.gameover-icon {
+  font-size: 3.5rem;
+  margin-bottom: 8px;
+  animation: bounceIn 0.5s ease;
+}
+
+.score-display {
+  background: rgba(255,255,255,0.04);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.score-row:last-child { border-bottom: none; }
+
+.score-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.score-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.highlight-score .score-val {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.new-high-msg {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #facc15;
+  animation: pulseGlow 1s ease infinite alternate;
+  margin-bottom: 12px;
+}
+
+.gameover-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ─── 18. ACHIEVEMENT TOAST ─── */
+.achievement-toast {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  z-index: var(--z-toast);
+  background: linear-gradient(135deg, rgba(124,58,237,0.9), rgba(59,130,246,0.9));
+  border: 1px solid rgba(167,139,250,0.5);
+  backdrop-filter: blur(16px);
+  border-radius: var(--radius-lg);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 300px;
+  animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.4);
+}
+
+.achievement-toast.hidden { display: none; }
+
+.achievement-toast span:first-child {
+  font-size: 1.5rem;
+}
+
+.toast-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.toast-text strong {
+  font-size: 0.75rem;
+  color: #fde047;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.toast-text span {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ─── 19. CONFETTI CANVAS ─── */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+}
+
+/* ─── 20. FOOTER ─── */
+.site-footer {
+  position: relative;
+  z-index: var(--z-content);
+  padding: 16px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.footer-brand {
+  font-weight: 700;
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-version {
+  background: rgba(255,255,255,0.1);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+}
+
+.footer-sep { opacity: 0.4; }
+
+.footer-link {
+  color: var(--accent-purple);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.footer-link:hover { color: var(--accent-blue); text-decoration: underline; }
+
+/* ─── 21. UTILITY ─── */
+.hidden { display: none !important; }
+
+/* ─── 22. ANIMATIONS (CSS Keyframes) ─── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes floatBob {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+@keyframes gameOverFlash {
+  0%   { background-color: inherit; }
+  50%  { background-color: rgba(239, 68, 68, 0.5); }
+  100% { background-color: inherit; }
+}
+
+@keyframes bumpScale {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+@keyframes badgePop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  80%  { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulseGlow {
+  from { text-shadow: 0 0 8px rgba(250,204,21,0.4); }
+  to   { text-shadow: 0 0 20px rgba(250,204,21,0.9); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes bounceIn {
+  0%   { transform: scale(0.3); opacity: 0; }
+  60%  { transform: scale(1.1); }
+  80%  { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(167,139,250,0.3); }
+  50%       { box-shadow: 0 0 40px rgba(167,139,250,0.7); }
+}
+
+/* ─── 23. RESPONSIVE DESIGN ─── */
+@media (max-width: 480px) {
+  .start-content {
+    padding: 32px 20px;
+  }
+
+  .start-title {
+    font-size: 1.3rem;
+  }
+
+  .hero-stats {
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .hero-stat-value {
+    font-size: 1.3rem;
+  }
+
+  .dashboard {
+    gap: 8px;
+  }
+
+  .dash-card {
+    padding: 10px 14px;
+    min-width: 68px;
+  }
+
+  .dash-value {
+    font-size: 1.2rem;
+  }
+
+  .status-bar {
+    font-size: 0.5rem;
+    padding: 12px 16px;
+  }
+
+  .modal-panel {
+    padding: 28px 20px;
+  }
+
+  .sound-controls {
+    top: auto;
+    bottom: 16px;
+    left: 16px;
+  }
+
+  #theme-toggle {
+    top: auto;
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .achievements-panel {
+    padding: 14px 16px;
+  }
+
+  .site-footer {
+    padding-bottom: 70px;
+  }
+}
+
+@media (min-width: 768px) {
+  .dashboard {
+    gap: 16px;
+  }
+
+  .dash-card {
+    padding: 16px 28px;
+  }
+
+  .dash-value {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .game-area {
+    padding-top: 60px;
+  }
+}
+
+/* ─── 24. LIGHT THEME SPECIFIC ─── */
+[data-theme="light"] .glass-panel {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="light"] .btn.green  { background: radial-gradient(circle at 30% 30%, #4ade80, #15803d); }
+[data-theme="light"] .btn.red    { background: radial-gradient(circle at 30% 30%, #f87171, #b91c1c); }
+[data-theme="light"] .btn.blue   { background: radial-gradient(circle at 30% 30%, #60a5fa, #1e40af); }
+[data-theme="light"] .btn.yellow { background: radial-gradient(circle at 30% 30%, #fde047, #b45309); }
+
+[data-theme="light"] .simon-center {
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+}
+
+[data-theme="light"] .start-screen {
+  background: rgba(0,0,0,0.08);
+}
+
+/* ─── 25. REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

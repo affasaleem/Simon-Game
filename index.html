@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NeuroFlash Simon Game Pro — A premium memory challenge game. Test your pattern recognition skills across unlimited levels. Built for portfolio showcase.">
+  <meta name="theme-color" content="#0f0c29">
+  <title>NeuroFlash™ — Simon Game Pro</title>
+
+  <!-- Favicon placeholder -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       FLOATING PARTICLE CANVAS (background layer)
+  ═══════════════════════════════════════════════ -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- ═══════════════════════════════════════════════
+       THEME TOGGLE (top-right corner)
+  ═══════════════════════════════════════════════ -->
+  <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark/light theme" title="Toggle Theme">
+    <span class="theme-icon" aria-hidden="true">☀️</span>
+  </button>
+
+  <!-- ═══════════════════════════════════════════════
+       SOUND CONTROLS (top-left corner)
+  ═══════════════════════════════════════════════ -->
+  <div class="sound-controls glass-panel" role="group" aria-label="Sound controls">
+    <button id="mute-btn" class="icon-btn" aria-label="Mute / Unmute sounds" title="Mute / Unmute">
+      <span id="mute-icon" aria-hidden="true">🔊</span>
+    </button>
+    <input
+      type="range"
+      id="volume-slider"
+      class="volume-slider"
+      min="0"
+      max="1"
+      step="0.05"
+      value="0.8"
+      aria-label="Volume control"
+      title="Adjust volume"
+    >
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       START SCREEN (hero section)
+  ═══════════════════════════════════════════════ -->
+  <section id="start-screen" class="start-screen" role="main" aria-label="Start Screen">
+    <div class="start-content glass-panel">
+      <!-- Logo / Icon -->
+      <div class="logo-icon" aria-hidden="true">🧠</div>
+
+      <!-- Brand -->
+      <div class="brand">
+        <span class="brand-prefix">Neuro</span><span class="brand-suffix">Flash</span>
+        <span class="brand-tm">™</span>
+      </div>
+
+      <h1 class="start-title">Simon Game Pro</h1>
+      <p class="start-subtitle">Test Your Memory Skills & Beat Your Best Score</p>
+
+      <!-- Stats preview -->
+      <div class="hero-stats" role="region" aria-label="Your statistics">
+        <div class="hero-stat">
+          <span class="hero-stat-value" id="hero-best">0</span>
+          <span class="hero-stat-label">Best Score</span>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-value" id="hero-games">0</span>
+          <span class="hero-stat-label">Games Played</span>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-value" id="hero-wins">0</span>
+          <span class="hero-stat-label">Total Wins</span>
+        </div>
+      </div>
+
+      <!-- Game Mode Selector -->
+      <div class="game-mode-selector" style="margin-bottom: 10px; width: 100%; display: flex; justify-content: center; align-items: center;">
+        <label for="game-mode" style="font-size: 0.85rem; color: var(--text-secondary); margin-right: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Game Mode:</label>
+        <select id="game-mode" style="background: rgba(0,0,0,0.2); color: var(--text-primary); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: var(--radius-full); font-family: 'Outfit', sans-serif; cursor: pointer; outline: none;">
+          <option value="normal" style="color: #000;">Classic Mode (Normal)</option>
+          <option value="reverse" style="color: #000;">Reverse Mode (Backwards)</option>
+        </select>
+      </div>
+
+      <!-- CTA buttons -->
+      <div class="start-buttons">
+        <button id="start-btn" class="cta-btn primary-btn" aria-label="Start the Simon Game">
+          <span>▶ Start Game</span>
+        </button>
+        <button id="instructions-btn" class="cta-btn secondary-btn" aria-label="View game instructions">
+          <span>📖 How to Play</span>
+        </button>
+      </div>
+
+      <p class="keyboard-hint" aria-hidden="true">or press any key to start</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN GAME AREA
+  ═══════════════════════════════════════════════ -->
+  <main id="game-area" class="game-area hidden" aria-label="Simon Game">
+
+    <!-- ─── GAME HEADER ─── -->
+    <header class="game-header" role="banner">
+      <div class="header-logo" aria-hidden="true">🧠</div>
+      <div class="header-brand">
+        <span class="brand-prefix">Neuro</span><span class="brand-suffix">Flash</span>
+        <span class="brand-tm">™</span>
+      </div>
+      <p class="header-subtitle">Test Your Memory Skills</p>
+    </header>
+
+    <!-- ─── STATUS BAR ─── -->
+    <div
+      id="level-title"
+      class="status-bar glass-panel"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      Press Any Key to Start
+    </div>
+
+    <!-- ─── DASHBOARD ─── -->
+    <section class="dashboard" role="region" aria-label="Game Dashboard">
+      <div class="dash-card glass-panel">
+        <span class="dash-label">Level</span>
+        <span class="dash-value" id="dash-level">0</span>
+      </div>
+      <div class="dash-card glass-panel">
+        <span class="dash-label">Score</span>
+        <span class="dash-value" id="dash-score">0</span>
+      </div>
+      <div class="dash-card glass-panel highlight-card">
+        <span class="dash-label">Best</span>
+        <span class="dash-value" id="dash-best">0</span>
+      </div>
+      <div class="dash-card glass-panel">
+        <span class="dash-label">Games</span>
+        <span class="dash-value" id="dash-games">0</span>
+      </div>
+    </section>
+
+    <!-- ─── PROGRESS BAR ─── -->
+    <div class="progress-container" role="progressbar" aria-label="Level progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="20" id="progress-bar-container">
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+        <span class="progress-label" id="progress-label">Level 0 / 20</span>
+      </div>
+    </div>
+
+    <!-- ─── SIMON GAME BOARD ─── -->
+    <div class="container" role="group" aria-label="Simon game buttons">
+      <!-- Center label -->
+      <div class="simon-center" aria-hidden="true">
+        <span class="simon-center-text">SIMON</span>
+      </div>
+
+      <!-- Row 1 -->
+      <div class="row">
+        <button
+          type="button"
+          id="green"
+          class="btn green"
+          aria-label="Green button"
+          aria-pressed="false"
+          tabindex="0"
+        ></button>
+
+        <button
+          type="button"
+          id="red"
+          class="btn red"
+          aria-label="Red button"
+          aria-pressed="false"
+          tabindex="0"
+        ></button>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="row">
+        <button
+          type="button"
+          id="yellow"
+          class="btn yellow"
+          aria-label="Yellow button"
+          aria-pressed="false"
+          tabindex="0"
+        ></button>
+
+        <button
+          type="button"
+          id="blue"
+          class="btn blue"
+          aria-label="Blue button"
+          aria-pressed="false"
+          tabindex="0"
+        ></button>
+      </div>
+    </div>
+
+    <!-- ─── ACHIEVEMENTS PANEL ─── -->
+    <section class="achievements-panel glass-panel" role="region" aria-label="Achievements">
+      <h2 class="achievements-title">🏆 Achievements</h2>
+      <div class="achievements-grid" id="achievements-grid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════
+       INSTRUCTIONS MODAL
+  ═══════════════════════════════════════════════ -->
+  <div
+    id="instructions-modal"
+    class="modal-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="instructions-modal-title"
+  >
+    <div class="modal-panel glass-panel" tabindex="-1">
+      <button class="modal-close" data-modal="instructions-modal" aria-label="Close instructions modal">✕</button>
+      <h2 id="instructions-modal-title" class="modal-title">📖 How to Play</h2>
+
+      <div class="modal-body">
+        <div class="instruction-section">
+          <h3>🎮 Game Rules & Modes</h3>
+          <ul>
+            <li><strong>Classic Mode:</strong> Simon plays a sequence. Repeat it exactly.</li>
+            <li><strong>Reverse Mode:</strong> Simon plays a sequence. Repeat it <strong>backwards</strong>!</li>
+            <li>Simon will replay the entire sequence from start to finish on every new level.</li>
+            <li>A single wrong press ends the game immediately.</li>
+          </ul>
+        </div>
+
+        <div class="instruction-section">
+          <h3>⭐ Scoring</h3>
+          <ul>
+            <li>Each level successfully completed = +10 points.</li>
+            <li>Reach level 5 = Bonus badge unlocked.</li>
+            <li>Reach level 10 = Memory Master badge.</li>
+            <li>Your best score is saved automatically.</li>
+          </ul>
+        </div>
+
+        <div class="instruction-section">
+          <h3>⌨️ Keyboard Controls</h3>
+          <div class="key-grid">
+            <span class="key-chip">Any Key</span><span>Start / Restart game</span>
+            <span class="key-chip">M</span><span>Mute / Unmute</span>
+            <span class="key-chip">T</span><span>Toggle theme</span>
+            <span class="key-chip">Esc</span><span>Close modal</span>
+          </div>
+        </div>
+
+        <div class="instruction-section">
+          <h3>🏆 Achievement Levels</h3>
+          <div class="achievement-preview">
+            <span class="ach-badge unlocked">🎯 First Steps</span>
+            <span class="ach-badge locked">⚡ Level 5</span>
+            <span class="ach-badge locked">🔥 Level 10</span>
+            <span class="ach-badge locked">💎 Level 20</span>
+            <span class="ach-badge locked">👑 Memory Master</span>
+          </div>
+        </div>
+      </div>
+
+      <button id="start-from-modal" class="cta-btn primary-btn">▶ Start Game</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       GAME OVER MODAL
+  ═══════════════════════════════════════════════ -->
+  <div
+    id="gameover-modal"
+    class="modal-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="gameover-modal-title"
+  >
+    <div class="modal-panel glass-panel gameover-panel" tabindex="-1">
+      <div class="gameover-icon" aria-hidden="true" id="gameover-icon">💀</div>
+      <h2 id="gameover-modal-title" class="modal-title">Game Over!</h2>
+
+      <div class="score-display">
+        <div class="score-row">
+          <span class="score-label">Your Score</span>
+          <span class="score-val" id="final-score">0</span>
+        </div>
+        <div class="score-row highlight-score">
+          <span class="score-label">🏆 Best Score</span>
+          <span class="score-val" id="final-best">0</span>
+        </div>
+        <div class="score-row">
+          <span class="score-label">Level Reached</span>
+          <span class="score-val" id="final-level">0</span>
+        </div>
+      </div>
+
+      <p id="new-high-msg" class="new-high-msg hidden">🎉 New High Score!</p>
+
+      <div class="gameover-actions">
+        <button id="play-again-btn" class="cta-btn primary-btn" aria-label="Play again">
+          🔄 Play Again
+        </button>
+        <button id="share-btn" class="cta-btn secondary-btn" aria-label="Share your score">
+          📤 Share Score
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       ACHIEVEMENT TOAST
+  ═══════════════════════════════════════════════ -->
+  <div id="achievement-toast" class="achievement-toast hidden" role="alert" aria-live="assertive">
+    <span id="toast-icon" aria-hidden="true">🏆</span>
+    <div class="toast-text">
+      <strong>Achievement Unlocked!</strong>
+      <span id="toast-name"></span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       CONFETTI CANVAS
+  ═══════════════════════════════════════════════ -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-content">
+      <span class="footer-brand">NeuroFlash™ Simon Game Pro</span>
+      <span class="footer-version">v2.0.0</span>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <span class="footer-author">Built by <strong>Affa Saleem</strong></span>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <a
+        href="https://github.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-link"
+        aria-label="View source on GitHub"
+      >⭐ GitHub</a>
+    </div>
+  </footer>
+
+  <!-- ─── Scripts ─── -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="script.js" charset="utf-8"></script>
+
+</body>
+</html>
